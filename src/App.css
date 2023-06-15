@@ -1,0 +1,103 @@
+body{
+  background-color: aliceblue;
+  font-family: sans-serif;
+}
+
+.add-comment-section{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-size: 20px;
+  padding: 20px;
+}
+
+.add-button{
+  background-color: green;
+  border: 0px;
+  border-radius: 7px;
+  width: 70px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+}
+
+.add-button:hover{
+  color: green;
+  background-color: white;
+  border: 1px solid green;
+}
+
+.comment-header{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  padding: 20px;
+  font-size: 40px;
+  color: cadetblue; 
+}
+
+.display-comments{  
+  margin: 10px 20px;
+  height: 100%;
+  padding: 20px;
+}
+
+.display-comments .comment{
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 15px;
+  background-color: white;
+  box-shadow: 1px 1px 6px rgb(139, 135, 135);
+}
+
+.display-comments .comment .action-buttons{
+  display: flex;
+  gap: 20px;
+} 
+
+.display-comments .comment .action-buttons button{
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 4px 16px;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.display-comments .comment .action-buttons .edit-button{
+  background-color: transparent;
+  border-width: 1px;
+}
+
+.display-comments .comment .action-buttons .reply-button {
+  background-color: blue;
+  border: 0px;
+  color: white;
+}
+
+.display-comments .comment .action-buttons .reply-button:hover {
+  color: blue;
+  border: 1px solid blue;
+  background-color: white;
+}
+
+.parent-comment-div{
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  font-size: 20px;
+}
+
+.child-comments-div{
+  margin-left: 20px;
+  padding: 20px;
+}
+
+.child-comments-div .child-comment{
+  padding: 10px;
+
+}
