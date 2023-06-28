@@ -1,13 +1,14 @@
 import React from "react";
 import "./App.css";
 import Comments from "./Comments";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
   // [ {id: "1", title:"This is the first comment", child:["This is the first child comment of first comment","This is the second comment of the first comment"]}]
   const [comments, setComments] = React.useState([]);
   const addcommentHandler = (comment) => {
     const newComment = {};
-    newComment["id"] = comments.length + 1; // Id
+    newComment["id"] = uuidv4(); // Id
     newComment["title"] = comment; // Comment
     newComment["child"] = []; // Child
 

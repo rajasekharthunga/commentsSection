@@ -1,5 +1,60 @@
 import React from "react";
 import { Button, Modal } from "antd";
+import { v4 as uuidv4 } from "uuid";
+
+const CommentsSection = ({
+  comment,
+  setEdit,
+  setOpenModel,
+  setEditReplyComment,
+  setEditReplyIndex,
+}) => {
+  return (
+    <div className="comment">
+      <div className="parent-comment-div">
+        <span>{comment.title}</span>
+        <div className="action-buttons">
+          <button
+            name="edit"
+            className="edit-button"
+            onClick={(e) => {
+              setEdit(true);
+              setOpenModel(true);
+              setEditReplyIndex(comment.id);
+              setEditReplyComment(comment.title);
+            }}
+          >
+            Edit
+          </button>
+          <button
+            name="reply"
+            className="reply-button"
+            onClick={(e) => {
+              setEdit(false);
+              setOpenModel(true);
+              setEditReplyIndex(comment.id);
+            }}
+          >
+            Reply
+          </button>
+        </div>
+      </div>
+      {/* Children */}
+      <div>
+        {comment.child.length > 0 &&
+          comment.child.map((commentChild) => (
+            <CommentsSection
+              comment={commentChild}
+              setEdit={setEdit}
+              setOpenModel={setOpenModel}
+              setEditReplyComment={setEditReplyComment}
+              setEditReplyIndex={setEditReplyIndex}
+            />
+          ))}
+      </div>
+    </div>
+  );
+};
 
 function Comments({ addcommentHandler, updatedCommentsHandler, comments }) {
   const [comment, setComment] = React.useState("");
@@ -8,21 +63,29 @@ function Comments({ addcommentHandler, updatedCommentsHandler, comments }) {
   const [openModel, setOpenModel] = React.useState(false);
   const [edit, setEdit] = React.useState(false);
 
-  const editReplyHandler = (key) => {
-    debugger;
+  const editReplyHandler = (key, commentsArr = [...comments]) => {
     if (key === "ok") {
-      let updatedComments = [...comments];
+      let updatedComments = [...commentsArr];
       if (edit) {
         updatedComments = updatedComments.map((comment) => {
           if (comment.id === editReplyIndex) {
             comment.title = editReplyComment;
+          } else if (comment.child.length > 0) {
+            editReplyHandler(key, comment.child);
           }
-          return comment;
+          return comment; // check th return
         });
       } else {
         updatedComments = updatedComments.map((comment) => {
+          debugger;
           if (comment.id === editReplyIndex) {
-            comment.child.push(editReplyComment);
+            const newChildComment = {};
+            newChildComment["id"] = uuidv4(); // Id
+            newChildComment["title"] = editReplyComment; // Comment
+            newChildComment["child"] = []; // Child
+            comment.child.push(newChildComment);
+          } else if (comment.child.length > 0) {
+            editReplyHandler(key, comment.child);
           }
           return comment;
         });
@@ -59,48 +122,15 @@ function Comments({ addcommentHandler, updatedCommentsHandler, comments }) {
           </button>
         </div>
         {/* Display the comments */}
-        {console.log("comments", comments)}
         <div className="display-comments">
           {comments.map((comment) => (
-            <>
-              <div className="comment">
-                <div className="parent-comment-div">
-                  <span>{comment.title}</span>
-                  <div className="action-buttons">
-                    <button
-                      name="edit"
-                      className="edit-button"
-                      onClick={(e) => {
-                        setEdit(true);
-                        setOpenModel(true);
-                        setEditReplyIndex(comment.id);
-                        setEditReplyComment(comment.title);
-                      }}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      name="reply"
-                      className="reply-button"
-                      onClick={(e) => {
-                        setEdit(false);
-                        setOpenModel(true);
-                        setEditReplyIndex(comment.id);
-                      }}
-                    >
-                      Reply
-                    </button>
-                  </div>
-                </div>
-                {comment.child.length > 0 && (
-                  <div className="child-comments-div">
-                    {comment.child.map((child) => (
-                      <div className="child-comment">{child}</div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </>
+            <CommentsSection
+              comment={comment}
+              setEdit={setEdit}
+              setOpenModel={setOpenModel}
+              setEditReplyComment={setEditReplyComment}
+              setEditReplyIndex={setEditReplyIndex}
+            />
           ))}
         </div>
       </div>
